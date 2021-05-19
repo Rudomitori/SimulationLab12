@@ -9,9 +9,6 @@
     <button v-on:click="$emit('stop-button-clicked')" :disabled="gameState !== GameState.started">
       Остановить
     </button>
-    <button v-on:click="$emit('play-button-clicked')" :disabled="gameState !== GameState.started">
-      Сыграть матч
-    </button>
   </div>
 </template>
 

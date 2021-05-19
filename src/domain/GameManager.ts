@@ -3,10 +3,10 @@ import Match from "./Match";
 
 export default class GameManager {
     commands: Command[];
-    round: number = 0;
     gameState: GameState = GameState.notStarted;
     matches: Match[];
     matchPlayed: number = 0;
+    private interval?: NodeJS.Timeout;
 
     constructor(commands: { name: string, rate?: number }[]) {
         this.commands = [];
@@ -32,10 +32,17 @@ export default class GameManager {
             this.reset();
         }
         this.gameState = GameState.started;
+
+        this.interval = setInterval(() => {
+            this.playMatch(0.1);
+        }, 100);
     }
 
     stop(){
         this.gameState = GameState.stopped
+        if(this.interval !== undefined){
+            clearInterval(this.interval);
+        }
     }
 
     reset(){
@@ -49,26 +56,32 @@ export default class GameManager {
         this.gameState = GameState.notStarted;
     }
 
-    playMatch() {
+    playMatch(time:number) {
         let match = this.matches[this.matchPlayed];
-        match.play();
+        match.play(time);
 
-        if (match.winner instanceof Command) {
-            match.winner.wins++;
-            match.winner.points += 2;
-            if (match.commands[0] == match.winner)
-                match.commands[1].routs++;
-            else
-                match.commands[0].routs++;
-        }
-        else {
-            for (let command of match.commands)
-                command.points += 1;
-        }
+        if(match.isFinished) {
+            if (match.winner instanceof Command) {
+                match.winner.wins++;
+                match.winner.points += 2;
+                if (match.commands[0] == match.winner)
+                    match.commands[1].routs++;
+                else
+                    match.commands[0].routs++;
+            }
+            else {
+                for (let command of match.commands)
+                    command.points += 1;
+            }
 
-        this.matchPlayed++;
-        if (this.matchPlayed == this.matches.length) {
-            this.gameState = GameState.finished;
+            this.matchPlayed++;
+            if (this.matchPlayed == this.matches.length) {
+                this.gameState = GameState.finished;
+
+                if(this.interval !== undefined) {
+                    clearInterval(this.interval);
+                }
+            }
         }
     }
 }

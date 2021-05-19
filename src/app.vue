@@ -4,8 +4,7 @@
     <matches v-bind:matches="gameManager.matches"></matches>
     <controls :game-state="gameManager.gameState"
               @start-button-clicked="gameManager.start()"
-              @stop-button-clicked="gameManager.stop()"
-              @play-button-clicked="gameManager.playMatch()"></controls>
+              @stop-button-clicked="gameManager.stop()"></controls>
   </div>
 </template>
 

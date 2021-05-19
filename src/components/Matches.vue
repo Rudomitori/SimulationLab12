@@ -7,6 +7,7 @@
       <th></th>
       <th>Голов</th>
       <th>Название команды</th>
+      <th>Прогресс</th>
     </tr>
     </thead>
     <tbody>
@@ -16,6 +17,7 @@
       <th> vs. </th>
       <th>{{ match.goals[1] }}</th>
       <th>{{ match.commands[1].name }}</th>
+      <th>{{ match.progress }}</th>
     </tr>
     </tbody>
   </table>
