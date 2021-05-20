@@ -1,14 +1,20 @@
 <template>
-  <div>
-    <button v-on:click="$emit('start-button-clicked')" :disabled="gameState === GameState.started">
-      {{
-        gameState === GameState.notStarted ? "Начать" :
-            gameState === GameState.finished ? "Заново" : "Продолжить"
-      }}
-    </button>
-    <button v-on:click="$emit('stop-button-clicked')" :disabled="gameState !== GameState.started">
-      Остановить
-    </button>
+  <div class="field has-addons">
+    <div class="control">
+      <button class="button is-primary"
+              v-on:click="$emit('start-button-clicked')" :disabled="gameState === GameState.started">
+        {{
+          gameState === GameState.notStarted ? "Начать" :
+              gameState === GameState.finished ? "Заново" : "Продолжить"
+        }}
+      </button>
+    </div>
+    <div class="control">
+      <button  class="button"
+               v-on:click="$emit('stop-button-clicked')" :disabled="gameState !== GameState.started">
+        Остановить
+      </button>
+    </div>
   </div>
 </template>
 

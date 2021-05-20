@@ -5,6 +5,7 @@ export default class GameManager {
     commands: Command[];
     gameState: GameState = GameState.notStarted;
     matches: Match[];
+    winner?: Command;
     matchPlayed: number = 0;
     private interval?: NodeJS.Timeout;
 
@@ -34,7 +35,7 @@ export default class GameManager {
         this.gameState = GameState.started;
 
         this.interval = setInterval(() => {
-            this.playMatch(0.1);
+            this.playMatch(0.05);
         }, 100);
     }
 
@@ -54,6 +55,7 @@ export default class GameManager {
 
         this.matchPlayed = 0;
         this.gameState = GameState.notStarted;
+        this.winner = undefined;
     }
 
     playMatch(time:number) {
@@ -76,11 +78,19 @@ export default class GameManager {
 
             this.matchPlayed++;
             if (this.matchPlayed == this.matches.length) {
-                this.gameState = GameState.finished;
-
                 if(this.interval !== undefined) {
-                    clearInterval(this.interval);
+                    clearInterval(this.interval)
                 }
+
+                this.gameState = GameState.finished
+                let winner = this.commands[0]
+                for(let command of this.commands) {
+                    if(command.points > winner.points
+                        || (command.points == winner.points && command.goals > winner.goals))
+                        winner = command
+                }
+                this.winner = winner
+
             }
         }
     }
